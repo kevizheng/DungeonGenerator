@@ -87,6 +87,16 @@ public class Grid{
 		if(treasureCount == 0) {
 			walkwayCells.get(random.nextInt(walkwayCells.size())).setCellType(CellType.TREASURE);
 		}
+		while(true) {
+			int selectCell = random.nextInt(walkwayCells.size());
+			Cell potentialExit = walkwayCells.get(selectCell);
+			int potentialRow = potentialExit.getRow();
+			int potentialColumn = potentialExit.getColumn();
+			if(potentialRow != startRow && potentialColumn != startColumn) {
+				potentialExit.setCellType(CellType.EXIT);
+				break;
+			}
+		}
 	}
 	private void setWalkway(int rowNumber, int columnNumber) {
 		if(board[rowNumber][columnNumber].getCellType() == CellType.WALKWAY) {
@@ -116,20 +126,37 @@ public class Grid{
 	public Cell[][] getBoard(){
 		return board;
 	}
+	
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public int getStartColumn() {
+		return startColumn;
+	}
+
 	public static void main(String[] args) {
 		Grid game = Grid.getGame();
 		game.initialize();
 		Cell[][] board = game.getBoard();
 		for(Cell[] row : board) {
 			for(Cell cell : row) {
-				if(cell.getCellType() == CellType.WALKWAY) {
-					System.out.print("[1]");
-				}
-				else if(cell.getCellType() == CellType.TREASURE) {
-					System.out.print("[2]");
-				}
-				else {
+				switch(cell.getCellType()) {
+				case WALKWAY:
+					if(cell.getRow() == game.getStartRow() && cell.getColumn() == game.getStartColumn()) {
+						System.out.print("[S]");
+						break;
+					}
+					System.out.print("[W]");
+					break;
+				case TREASURE:
+					System.out.print("[T]");
+					break;
+				case UNUSED:
 					System.out.print("[0]");
+					break;
+				case EXIT:
+					System.out.print("[E]");
 				}
 			}
 			System.out.println();

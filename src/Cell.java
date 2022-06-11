@@ -22,4 +22,12 @@ public class Cell {
 	public CellType getCellType() {
 		return cellType;
 	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getColumn() {
+		return column;
+	}
 }

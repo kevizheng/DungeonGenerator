@@ -1,16 +1,20 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
 public class Grid{
 	private static Grid game = new Grid();
-	private static final int ROW_SIZE = 7;
-	private static final int COLUMN_SIZE = 7;
-	private static final int MAP_SIZE = 30;
+	private static final int ROW_SIZE = 8;
+	private static final int COLUMN_SIZE = 8;
+	private static final int MAP_SIZE = Math.round((float) (ROW_SIZE * COLUMN_SIZE * 0.65));
+	private static final int MAX_TREASURE = 5;
 	private Cell[][] board = new Cell[ROW_SIZE][COLUMN_SIZE];
+	private ArrayList<Cell> walkwayCells = new ArrayList<Cell>();
 	private int startRow;
 	private int startColumn;
 	private int currentMapSize = 0;
+	private int treasureCount = 0;
 	
 	private Grid() {
 		super();
@@ -30,6 +34,7 @@ public class Grid{
 		Random random = new Random();
 		int rowNumber = random.nextInt(ROW_SIZE);
 		int columnNumber = random.nextInt(COLUMN_SIZE);
+		int treasureCount = 0;
 		currentMapSize = 1;
 		int direction = 0;
 		startRow = rowNumber;
@@ -46,6 +51,7 @@ public class Grid{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
+				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 1:
 				columnNumber++;
@@ -54,6 +60,7 @@ public class Grid{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
+				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 2:
 				rowNumber++;
@@ -62,6 +69,7 @@ public class Grid{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
+				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 3:
 				columnNumber--;
@@ -70,11 +78,14 @@ public class Grid{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
+				selectTreasure(rowNumber, columnNumber);
 				break;
 			default:
 				break;
 			}
-			
+		}
+		if(treasureCount == 0) {
+			walkwayCells.get(random.nextInt(walkwayCells.size())).setCellType(CellType.TREASURE);
 		}
 	}
 	private void setWalkway(int rowNumber, int columnNumber) {
@@ -82,7 +93,20 @@ public class Grid{
 			return;
 		}
 		board[rowNumber][columnNumber].setCellType(CellType.WALKWAY);
+		walkwayCells.add(board[rowNumber][columnNumber]);
 		currentMapSize++;
+	}
+	
+	private void selectTreasure(int rowNumber, int columnNumber) {
+		if(treasureCount >= MAX_TREASURE) {
+			return;
+		}
+		Random random = new Random();
+		int result = random.nextInt(101);
+		if(result % 2 == 0 && result % 3 == 0) {
+			board[rowNumber][columnNumber].setCellType(CellType.TREASURE);
+			treasureCount++;
+		}
 	}
 	
 	public static Grid getGame() {
@@ -100,6 +124,9 @@ public class Grid{
 			for(Cell cell : row) {
 				if(cell.getCellType() == CellType.WALKWAY) {
 					System.out.print("[1]");
+				}
+				else if(cell.getCellType() == CellType.TREASURE) {
+					System.out.print("[2]");
 				}
 				else {
 					System.out.print("[0]");

@@ -1,9 +1,10 @@
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
-public class Grid{
+public class Grid extends JPanel{
 	private static Grid game = new Grid();
 	private static final int ROW_SIZE = 8;
 	private static final int COLUMN_SIZE = 8;
@@ -16,6 +17,7 @@ public class Grid{
 	private int startColumn;
 	private int currentMapSize = 0;
 	private int treasureCount = 0;
+	private Player player;
 	
 	private Grid() {
 		super();
@@ -29,6 +31,7 @@ public class Grid{
 			}
 		}
 		createMap();
+		player = new Player(startRow, startColumn);
 	}
 	
 	private void createMap() {
@@ -142,6 +145,18 @@ public class Grid{
 		return startColumn;
 	}
 
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		int cellWidth = this.getWidth() / COLUMN_SIZE;
+		int cellHeight = this.getHeight() / ROW_SIZE;
+		for(int i = 0; i < ROW_SIZE; i++) {
+			for(int j = 0; j < COLUMN_SIZE; j++) {
+				board[i][j].draw(cellWidth, cellHeight, i * cellWidth, j * cellHeight, g);
+			}
+		}
+		
+	}
 	public static void main(String[] args) {
 		Grid game = Grid.getGame();
 		game.initialize();

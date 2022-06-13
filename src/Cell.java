@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Set;
 
 public class Cell {
@@ -29,5 +31,17 @@ public class Cell {
 	
 	public int getColumn() {
 		return column;
+	}
+	
+	public void draw(int cellWidth, int cellHeight, int xOffset, int yOffset, Graphics g) {
+		g.drawRect(xOffset, yOffset , cellWidth, cellHeight);
+		if(cellType == CellType.UNUSED) {
+			g.setColor(Color.BLACK);
+		}
+		else {
+			g.setColor(Color.YELLOW);
+		}
+		g.fillRect(xOffset, yOffset, cellWidth, cellHeight);
+			
 	}
 }

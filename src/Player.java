@@ -2,7 +2,8 @@ import java.util.Random;
 
 public class Player {
 	
-	private int strength, dexterity, constitution, hp, row, column;
+	private int HP_SHIFT = 5;
+	private int strength, dexterity, constitution, hp, row, column, exp;
 	private int money = 0;
 	
 	public Player(int row, int column) {
@@ -12,7 +13,19 @@ public class Player {
 		strength = random.nextInt(21);
 		dexterity = random.nextInt(21);
 		constitution = random.nextInt(21);
-		hp = Math.round( (float) (25 * Math.log10(constitution + 5)));
+		hp = Math.round( (float) (25 * Math.log10(constitution + HP_SHIFT)));
 	}
 
+	public void movePlayer(Direction direction) {
+		switch(direction) {
+		case UP:
+			row--;
+		case DOWN:
+			row++;
+		case LEFT:
+			column--;
+		case RIGHT:
+			column++;
+		}
+	}
 }

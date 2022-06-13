@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Random;
 
 public class Player {
@@ -27,5 +29,12 @@ public class Player {
 		case RIGHT:
 			column++;
 		}
+	}
+	
+	public void draw(int cellWidth, int cellHeight, int xOffset, int yOffset, Graphics g) {
+		g.setColor(Color.CYAN);
+		g.drawOval(xOffset, yOffset , cellWidth, cellHeight);
+		g.fillOval(xOffset, yOffset, cellWidth, cellHeight);
+			
 	}
 }

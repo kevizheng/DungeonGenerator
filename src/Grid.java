@@ -92,9 +92,9 @@ public class Grid extends JPanel{
 			walkwayCells.get(random.nextInt(walkwayCells.size())).setCellType(CellType.TREASURE);
 		}
 		for(int i = 0; i < MAX_TRAPS; i++) {
-			Cell potentialTrap = walkwayCells.get(random.nextInt(walkwayCells.size()));
-			if(potentialTrap.getCellType() == CellType.WALKWAY) {
-				potentialTrap.setCellType(CellType.MONSTER);
+			Cell potentialMonster = walkwayCells.get(random.nextInt(walkwayCells.size()));
+			if(potentialMonster.getCellType() == CellType.WALKWAY && potentialMonster.getRow() != startRow && potentialMonster.getColumn() != startColumn) {
+				potentialMonster.setCellType(CellType.MONSTER);
 			}
 		}
 		while(true) {
@@ -118,7 +118,7 @@ public class Grid extends JPanel{
 	}
 	
 	private void selectTreasure(int rowNumber, int columnNumber) {
-		if(treasureCount >= MAX_TREASURE) {
+		if(treasureCount >= MAX_TREASURE || (rowNumber == startRow && columnNumber == startColumn)) {
 			return;
 		}
 		Random random = new Random();
@@ -155,38 +155,7 @@ public class Grid extends JPanel{
 				board[i][j].draw(cellWidth, cellHeight, i * cellWidth, j * cellHeight, g);
 			}
 		}
+		player.draw(cellWidth, cellHeight, startRow * cellWidth, startColumn * cellHeight, g);
 		
-	}
-	public static void main(String[] args) {
-		Grid game = Grid.getGame();
-		game.initialize();
-		Cell[][] board = game.getBoard();
-		for(Cell[] row : board) {
-			for(Cell cell : row) {
-				switch(cell.getCellType()) {
-				case WALKWAY:
-					if(cell.getRow() == game.getStartRow() && cell.getColumn() == game.getStartColumn()) {
-						System.out.print("[S]");
-						break;
-					}
-					System.out.print("[W]");
-					break;
-				case TREASURE:
-					System.out.print("[T]");
-					break;
-				case UNUSED:
-					System.out.print("[0]");
-					break;
-				case EXIT:
-					System.out.print("[E]");
-					break;
-				case MONSTER:
-					System.out.print("[M]");
-				default:
-					break;
-				}
-			}
-			System.out.println();
-		}
 	}
 }

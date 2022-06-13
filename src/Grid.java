@@ -9,6 +9,7 @@ public class Grid{
 	private static final int COLUMN_SIZE = 8;
 	private static final int MAP_SIZE = Math.round((float) (ROW_SIZE * COLUMN_SIZE * 0.65));
 	private static final int MAX_TREASURE = 5;
+	private static final int MAX_TRAPS = 3;
 	private Cell[][] board = new Cell[ROW_SIZE][COLUMN_SIZE];
 	private ArrayList<Cell> walkwayCells = new ArrayList<Cell>();
 	private int startRow;
@@ -34,7 +35,7 @@ public class Grid{
 		Random random = new Random();
 		int rowNumber = random.nextInt(ROW_SIZE);
 		int columnNumber = random.nextInt(COLUMN_SIZE);
-		int treasureCount = 0;
+		treasureCount = 0;
 		currentMapSize = 1;
 		int direction = 0;
 		startRow = rowNumber;
@@ -86,6 +87,12 @@ public class Grid{
 		}
 		if(treasureCount == 0) {
 			walkwayCells.get(random.nextInt(walkwayCells.size())).setCellType(CellType.TREASURE);
+		}
+		for(int i = 0; i < MAX_TRAPS; i++) {
+			Cell potentialTrap = walkwayCells.get(random.nextInt(walkwayCells.size()));
+			if(potentialTrap.getCellType() == CellType.WALKWAY) {
+				potentialTrap.setCellType(CellType.MONSTER);
+			}
 		}
 		while(true) {
 			int selectCell = random.nextInt(walkwayCells.size());
@@ -157,6 +164,11 @@ public class Grid{
 					break;
 				case EXIT:
 					System.out.print("[E]");
+					break;
+				case MONSTER:
+					System.out.print("[M]");
+				default:
+					break;
 				}
 			}
 			System.out.println();

@@ -1,10 +1,12 @@
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
-public class Grid extends JPanel{
+public class Grid extends JPanel implements KeyListener{
 	private static Grid game = new Grid();
 	private static final int ROW_SIZE = 8;
 	private static final int COLUMN_SIZE = 8;
@@ -32,6 +34,8 @@ public class Grid extends JPanel{
 		}
 		createMap();
 		player = new Player(startRow, startColumn);
+		addKeyListener(this);
+		setFocusable(true);
 	}
 	
 	private void createMap() {
@@ -152,10 +156,88 @@ public class Grid extends JPanel{
 		int cellHeight = this.getHeight() / ROW_SIZE;
 		for(int i = 0; i < ROW_SIZE; i++) {
 			for(int j = 0; j < COLUMN_SIZE; j++) {
-				board[i][j].draw(cellWidth, cellHeight, i * cellWidth, j * cellHeight, g);
+				board[i][j].draw(cellWidth, cellHeight, j * cellWidth, i * cellHeight, g);
 			}
 		}
-		player.draw(cellWidth, cellHeight, startRow * cellWidth, startColumn * cellHeight, g);
+		player.draw(cellWidth, cellHeight, player.getColumn() * cellWidth, player.getRow() * cellHeight, g);
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		switch(e.getKeyChar()) {
+		case 'w':
+			if(checkBounds(Direction.UP)) {
+				player.movePlayer(Direction.UP);
+			}
+			System.out.println("UP");
+			break;
+		case 'a':
+			if(checkBounds(Direction.LEFT)) {
+				player.movePlayer(Direction.LEFT);
+			}
+			System.out.println("LEFT");
+			break;
+		case 's':
+			if(checkBounds(Direction.DOWN)) {
+				player.movePlayer(Direction.DOWN);
+			}
+			System.out.println("DOWN");
+			break;
+		case 'd':
+			if(checkBounds(Direction.RIGHT)) {
+				player.movePlayer(Direction.RIGHT);
+			}
+			System.out.println("RIGHT");
+			break;
+		default:
+			break;
+		}
+		revalidate();
+		repaint();
+	}
+	
+	private boolean checkBounds(Direction direction) {
+		int newColumn = 0;
+		int newRow = 0;
+		switch(direction) {
+		case UP:
+			newRow = player.getRow() - 1;
+			if(newRow < 0 || board[newRow][player.getColumn()].getCellType() == CellType.UNUSED) {
+				return false;
+			}
+			return true;
+		case LEFT:
+			newColumn = player.getColumn() - 1;
+			if(newColumn < 0 || board[player.getRow()][newColumn].getCellType() == CellType.UNUSED) {
+				return false;
+			}
+			return true;
+		case RIGHT:
+			newColumn = player.getColumn() + 1;
+			if(newColumn > COLUMN_SIZE - 1 || board[player.getRow()][newColumn].getCellType() == CellType.UNUSED) {
+				return false;
+			}
+			return true;
+		case DOWN:
+			newRow = player.getRow() + 1;
+			if(newRow > ROW_SIZE - 1 || board[newRow][player.getColumn()].getCellType() == CellType.UNUSED) {
+				return false;
+			}
+			return true;
+		default:
+			return false;
+		}
 		
 	}
 }

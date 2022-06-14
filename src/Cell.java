@@ -34,8 +34,6 @@ public class Cell {
 	}
 	
 	public void draw(int cellWidth, int cellHeight, int xOffset, int yOffset, Graphics g) {
-		g.setColor(Color.BLACK);
-		g.drawRect(xOffset, yOffset , cellWidth, cellHeight);
 		switch(cellType) {
 		case UNUSED:
 			g.setColor(Color.BLACK);
@@ -52,10 +50,6 @@ public class Cell {
 		case EXIT:
 			g.setColor(Color.WHITE);
 			break;
-		default:
-			g.setColor(Color.BLACK);
-			break;
-			
 		}
 		g.fillRect(xOffset, yOffset, cellWidth, cellHeight);
 			

@@ -4,6 +4,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Grid extends JPanel implements KeyListener{
@@ -15,14 +16,20 @@ public class Grid extends JPanel implements KeyListener{
 	private static final int MAX_TRAPS = 3;
 	private Cell[][] board = new Cell[ROW_SIZE][COLUMN_SIZE];
 	private ArrayList<Cell> walkwayCells = new ArrayList<Cell>();
+	private ArrayList<Cell> treasureCells = new ArrayList<Cell>();
+	private ArrayList<Cell> monsterCells = new ArrayList<Cell>();
+	private Cell exitCell;
 	private int startRow;
 	private int startColumn;
 	private int currentMapSize = 0;
 	private int treasureCount = 0;
-	private Player player;
+	private Player player = new Player();
+	private InfoPanel info;
 	
 	private Grid() {
 		super();
+		addKeyListener(this);
+		setFocusable(true);
 	}
 	
 	public void initialize() {
@@ -33,9 +40,6 @@ public class Grid extends JPanel implements KeyListener{
 			}
 		}
 		createMap();
-		player = new Player(startRow, startColumn);
-		addKeyListener(this);
-		setFocusable(true);
 	}
 	
 	private void createMap() {
@@ -47,6 +51,8 @@ public class Grid extends JPanel implements KeyListener{
 		int direction = 0;
 		startRow = rowNumber;
 		startColumn = columnNumber;
+		player.setRow(startRow);
+		player.setColumn(startColumn);
 		board[rowNumber][columnNumber].setCellType(CellType.WALKWAY);
 		while(currentMapSize < MAP_SIZE) {
 			// 0 = up, 1 = right, 2 = down, 3 = left
@@ -99,6 +105,7 @@ public class Grid extends JPanel implements KeyListener{
 			Cell potentialMonster = walkwayCells.get(random.nextInt(walkwayCells.size()));
 			if(potentialMonster.getCellType() == CellType.WALKWAY && potentialMonster.getRow() != startRow && potentialMonster.getColumn() != startColumn) {
 				potentialMonster.setCellType(CellType.MONSTER);
+				monsterCells.add(potentialMonster);
 			}
 		}
 		while(true) {
@@ -108,6 +115,7 @@ public class Grid extends JPanel implements KeyListener{
 			int potentialColumn = potentialExit.getColumn();
 			if(potentialRow != startRow && potentialColumn != startColumn) {
 				potentialExit.setCellType(CellType.EXIT);
+				exitCell = potentialExit;
 				break;
 			}
 		}
@@ -129,6 +137,7 @@ public class Grid extends JPanel implements KeyListener{
 		int result = random.nextInt(101);
 		if(result % 2 == 0 && result % 3 == 0) {
 			board[rowNumber][columnNumber].setCellType(CellType.TREASURE);
+			treasureCells.add(board[rowNumber][columnNumber]);
 			treasureCount++;
 		}
 	}
@@ -169,8 +178,6 @@ public class Grid extends JPanel implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -203,6 +210,10 @@ public class Grid extends JPanel implements KeyListener{
 		default:
 			break;
 		}
+		treasureCheck();
+		monsterCheck();
+		exitCheck();
+		info.initialize();
 		revalidate();
 		repaint();
 	}
@@ -238,6 +249,48 @@ public class Grid extends JPanel implements KeyListener{
 		default:
 			return false;
 		}
-		
+	}
+	private void treasureCheck() {
+		for(Cell treasure : treasureCells) {
+			if(checkLocation(treasure, player)) {
+				treasure.setCellType(CellType.WALKWAY);
+				player.addTreasureMoney();
+				repaint();
+			}
+		}
+	}
+	private void monsterCheck() {
+		for(Cell monster : monsterCells) {
+			if(checkLocation(monster, player)) {
+				monster.setCellType(CellType.WALKWAY);
+				player.damageCalculation(3);
+				repaint();
+			}
+		}
+	}
+	
+	private void exitCheck() {
+		revalidate();
+		repaint();
+		if(checkLocation(exitCell, player)) {
+			Object selectedValue = JOptionPane.showConfirmDialog(null, "Would you like to continue to the next floor?", "Delve Further?", JOptionPane.YES_NO_OPTION);
+			if((Integer) selectedValue == JOptionPane.YES_OPTION) {
+				this.removeAll();
+				walkwayCells.clear();
+				treasureCells.clear();
+				monsterCells.clear();
+				initialize();
+				revalidate();
+				repaint();
+			}
+		}
+	}
+	
+	private boolean checkLocation(Cell cell, Player player) {
+		return(player.getColumn() == cell.getColumn() && player.getRow() == cell.getRow());
+	}
+	
+	public void setInfoPanel(InfoPanel info) {
+		this.info = info;
 	}
 }

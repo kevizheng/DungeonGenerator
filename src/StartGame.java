@@ -10,9 +10,10 @@ public class StartGame extends JFrame{
 		game.initialize();
 		info.setGrid(game);
 		info.initialize();
+		game.setInfoPanel(info);
 		add(game);
 		add(info, BorderLayout.SOUTH);
-		this.setSize(750, 750);
+		this.setSize(650, 650);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}

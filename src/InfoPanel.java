@@ -15,10 +15,11 @@ public class InfoPanel extends JPanel{
 	private JLabel level;
 	
 	public InfoPanel() {
-		super(new GridLayout(3, 3));
 	}
 	
 	public void initialize() {
+		this.removeAll();
+		this.setLayout(new GridLayout(3, 3));
 		hp = new JLabel("HP: " + player.getCurrentHP() + "/" + player.getMaxHP());
 		money = new JLabel("Money: " + player.getMoney());
 		exp = new JLabel("EXP: " + player.getEXP());
@@ -34,6 +35,7 @@ public class InfoPanel extends JPanel{
 		add(constitution);
 		add(dexterity);
 		setVisible(true);
+		repaint();
 	}
 	
 	public void setGrid(Grid game) {

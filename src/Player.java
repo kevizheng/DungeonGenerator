@@ -3,18 +3,17 @@ import java.awt.Graphics;
 import java.util.Random;
 
 public class Player {
-	private int HP_SHIFT = 5;
+	private static final int HP_SHIFT = 5;
+	private static final int STAT_SHIFT = 5;
 	private int strength, dexterity, constitution, currentHP, row, column, exp, maxHP;
 	private int level = 1;
 	private int money = 0;
 	
-	public Player(int row, int column) {
-		this.column = column;
-		this.row = row;
+	public Player() {
 		Random random = new Random();
-		strength = random.nextInt(21);
-		dexterity = random.nextInt(21);
-		constitution = random.nextInt(21);
+		strength = random.nextInt(16) + STAT_SHIFT;
+		dexterity = random.nextInt(16) + STAT_SHIFT;
+		constitution = random.nextInt(16) + STAT_SHIFT;
 		maxHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
 		currentHP = maxHP;
 	}
@@ -38,8 +37,9 @@ public class Player {
 		}
 	}
 	
-	public void addMoney(int money) {
-		this.money += money;
+	public void addTreasureMoney() {
+		Random random = new Random();
+		this.money += random.nextInt(15) + 5;
 	}
 	
 	public void damageCalculation(int incomingDamage) {
@@ -53,6 +53,14 @@ public class Player {
 			
 	}
 	
+	
+	public void setRow(int row) {
+		this.row = row;
+	}
+	
+	public void setColumn(int column) {
+		this.column = column;
+	}
 	public int getRow() {
 		return row;
 	}

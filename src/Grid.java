@@ -162,6 +162,10 @@ public class Grid extends JPanel implements KeyListener{
 		player.draw(cellWidth, cellHeight, player.getColumn() * cellWidth, player.getRow() * cellHeight, g);
 		
 	}
+	
+	public Player getPlayer() {
+		return player;
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -180,25 +184,21 @@ public class Grid extends JPanel implements KeyListener{
 			if(checkBounds(Direction.UP)) {
 				player.movePlayer(Direction.UP);
 			}
-			System.out.println("UP");
 			break;
 		case 'a':
 			if(checkBounds(Direction.LEFT)) {
 				player.movePlayer(Direction.LEFT);
 			}
-			System.out.println("LEFT");
 			break;
 		case 's':
 			if(checkBounds(Direction.DOWN)) {
 				player.movePlayer(Direction.DOWN);
 			}
-			System.out.println("DOWN");
 			break;
 		case 'd':
 			if(checkBounds(Direction.RIGHT)) {
 				player.movePlayer(Direction.RIGHT);
 			}
-			System.out.println("RIGHT");
 			break;
 		default:
 			break;

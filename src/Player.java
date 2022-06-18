@@ -3,9 +3,9 @@ import java.awt.Graphics;
 import java.util.Random;
 
 public class Player {
-	
 	private int HP_SHIFT = 5;
-	private int strength, dexterity, constitution, hp, row, column, exp, level;
+	private int strength, dexterity, constitution, currentHP, row, column, exp, maxHP;
+	private int level = 1;
 	private int money = 0;
 	
 	public Player(int row, int column) {
@@ -15,7 +15,8 @@ public class Player {
 		strength = random.nextInt(21);
 		dexterity = random.nextInt(21);
 		constitution = random.nextInt(21);
-		hp = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
+		maxHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
+		currentHP = maxHP;
 	}
 
 	public void movePlayer(Direction direction) {
@@ -42,7 +43,7 @@ public class Player {
 	}
 	
 	public void damageCalculation(int incomingDamage) {
-		hp -= Math.round(incomingDamage - ((0.7 * strength + 0.3 * constitution) / 10));
+		currentHP -= Math.round(incomingDamage - ((0.7 * strength + 0.3 * constitution) / 10));
 	}
 	
 	public void draw(int cellWidth, int cellHeight, int xOffset, int yOffset, Graphics g) {
@@ -57,5 +58,36 @@ public class Player {
 	}
 	public int getColumn() {
 		return column;
+	}
+	
+	public int getStrength() {
+		return strength;
+	}
+
+	public int getDexterity() {
+		return dexterity;
+	}
+
+	public int getConstitution() {
+		return constitution;
+	}
+
+	public int getCurrentHP() {
+		return currentHP;
+	}
+	public int getMaxHP() {
+		return maxHP;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+	
+	public int getEXP() {
+		return exp;
 	}
 }

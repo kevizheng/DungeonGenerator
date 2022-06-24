@@ -13,7 +13,7 @@ public class Grid extends JPanel implements KeyListener{
 	private static final int COLUMN_SIZE = 8;
 	private static final int MAP_SIZE = Math.round((float) (ROW_SIZE * COLUMN_SIZE * 0.65));
 	private static final int MAX_TREASURE = 5;
-	private static final int MAX_TRAPS = 3;
+	private static final int MAX_MONSTERS = 5;
 	private Cell[][] board = new Cell[ROW_SIZE][COLUMN_SIZE];
 	private ArrayList<Cell> walkwayCells = new ArrayList<Cell>();
 	private ArrayList<Cell> treasureCells = new ArrayList<Cell>();
@@ -65,7 +65,6 @@ public class Grid extends JPanel implements KeyListener{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
-				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 1:
 				columnNumber++;
@@ -74,7 +73,6 @@ public class Grid extends JPanel implements KeyListener{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
-				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 2:
 				rowNumber++;
@@ -83,7 +81,6 @@ public class Grid extends JPanel implements KeyListener{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
-				selectTreasure(rowNumber, columnNumber);
 				break;
 			case 3:
 				columnNumber--;
@@ -92,28 +89,25 @@ public class Grid extends JPanel implements KeyListener{
 					continue;
 				}
 				setWalkway(rowNumber, columnNumber);
-				selectTreasure(rowNumber, columnNumber);
 				break;
 			default:
 				break;
 			}
 		}
-		if(treasureCount == 0) {
-			walkwayCells.get(random.nextInt(walkwayCells.size())).setCellType(CellType.TREASURE);
+		for(int i = 0; i < MAX_TREASURE; i++) {
+			Cell potentialTreasure = walkwayCells.get(random.nextInt(walkwayCells.size()));
+			selectSpecialCell(potentialTreasure, CellType.TREASURE);
 		}
-		for(int i = 0; i < MAX_TRAPS; i++) {
+		for(int i = 0; i < MAX_MONSTERS; i++) {
 			Cell potentialMonster = walkwayCells.get(random.nextInt(walkwayCells.size()));
-			if(potentialMonster.getCellType() == CellType.WALKWAY && potentialMonster.getRow() != startRow && potentialMonster.getColumn() != startColumn) {
-				potentialMonster.setCellType(CellType.MONSTER);
-				monsterCells.add(potentialMonster);
-			}
+			selectSpecialCell(potentialMonster, CellType.MONSTER);
 		}
 		while(true) {
 			int selectCell = random.nextInt(walkwayCells.size());
 			Cell potentialExit = walkwayCells.get(selectCell);
 			int potentialRow = potentialExit.getRow();
 			int potentialColumn = potentialExit.getColumn();
-			if(potentialRow != startRow && potentialColumn != startColumn) {
+			if(potentialRow != startRow && potentialColumn != startColumn && potentialExit.getCellType() == CellType.WALKWAY) {
 				potentialExit.setCellType(CellType.EXIT);
 				exitCell = potentialExit;
 				break;
@@ -129,16 +123,19 @@ public class Grid extends JPanel implements KeyListener{
 		currentMapSize++;
 	}
 	
-	private void selectTreasure(int rowNumber, int columnNumber) {
-		if(treasureCount >= MAX_TREASURE || (rowNumber == startRow && columnNumber == startColumn)) {
-			return;
-		}
+	private void selectSpecialCell(Cell cell, CellType type) {
 		Random random = new Random();
-		int result = random.nextInt(101);
-		if(result % 2 == 0 && result % 3 == 0) {
-			board[rowNumber][columnNumber].setCellType(CellType.TREASURE);
-			treasureCells.add(board[rowNumber][columnNumber]);
-			treasureCount++;
+		int select = random.nextInt(101);
+		if(cell.getCellType() == CellType.WALKWAY && cell.getRow() != startRow && cell.getColumn() != startColumn) {
+			if(select % 2 == 0 && select % 3 == 0) {
+				cell.setCellType(type);
+				if(type == CellType.TREASURE) {
+					treasureCells.add(cell);
+				}
+				else if (type == CellType.MONSTER){
+					monsterCells.add(cell);
+				}
+			}
 		}
 	}
 	
@@ -158,6 +155,7 @@ public class Grid extends JPanel implements KeyListener{
 		return startColumn;
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -254,8 +252,10 @@ public class Grid extends JPanel implements KeyListener{
 		for(Cell treasure : treasureCells) {
 			if(checkLocation(treasure, player)) {
 				treasure.setCellType(CellType.WALKWAY);
+				treasureCells.remove(treasure);
 				player.addTreasureMoney();
 				repaint();
+				break;
 			}
 		}
 	}
@@ -263,9 +263,14 @@ public class Grid extends JPanel implements KeyListener{
 		for(Cell monster : monsterCells) {
 			if(checkLocation(monster, player)) {
 				monster.setCellType(CellType.WALKWAY);
+				monsterCells.remove(monster);
 				player.damageCalculation(3);
 				repaint();
+				break;
 			}
+		}
+		if(player.getCurrentHP() <= 0) {
+			gameOver();
 		}
 	}
 	
@@ -292,5 +297,10 @@ public class Grid extends JPanel implements KeyListener{
 	
 	public void setInfoPanel(InfoPanel info) {
 		this.info = info;
+	}
+	
+	private void gameOver() {
+		JOptionPane.showMessageDialog(null, "You have lost all your HP and died.", "Game Over.", JOptionPane.INFORMATION_MESSAGE);
+		this.setEnabled(false);
 	}
 }

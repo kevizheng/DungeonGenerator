@@ -22,7 +22,6 @@ public class Grid extends JPanel implements KeyListener{
 	private int startRow;
 	private int startColumn;
 	private int currentMapSize = 0;
-	private int treasureCount = 0;
 	private Player player = new Player();
 	private InfoPanel info;
 	
@@ -46,7 +45,6 @@ public class Grid extends JPanel implements KeyListener{
 		Random random = new Random();
 		int rowNumber = random.nextInt(ROW_SIZE);
 		int columnNumber = random.nextInt(COLUMN_SIZE);
-		treasureCount = 0;
 		currentMapSize = 1;
 		int direction = 0;
 		startRow = rowNumber;

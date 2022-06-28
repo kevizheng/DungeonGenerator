@@ -15,6 +15,8 @@ public class BattleOptions extends JPanel implements ActionListener{
 	
 	public BattleOptions(Player player, Monster monster) {
 		setLayout(new GridLayout(2, 2));
+		this.player = player;
+		this.monster = monster;
 		add(attack);
 		add(magic);
 		add(items);

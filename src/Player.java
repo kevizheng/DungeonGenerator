@@ -69,6 +69,10 @@ public class Player {
 	public void setColumn(int column) {
 		this.column = column;
 	}
+	
+	public void setCurrentHP(int damage) {
+		currentHP -= damage;
+	}
 	public int getRow() {
 		return row;
 	}

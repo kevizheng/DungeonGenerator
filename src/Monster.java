@@ -47,4 +47,8 @@ public abstract class Monster {
 	public int getEXP() {
 		return expYield;
 	}
+	
+	public int getPower() {
+		return power;
+	}
 }

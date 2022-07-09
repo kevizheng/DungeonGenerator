@@ -42,6 +42,16 @@ public class BattleOptions extends JPanel implements ActionListener{
 				player.addMoney(monster.getMoney());
 				player.addEXP(monster.getEXP());
 				window.dispose();
+				return;
+			}
+			int damage = monster.getPower() - (player.getConstitution() + player.getStrength() / 8);
+			if(damage <= 0) {
+				damage = 1;
+			}
+			player.setCurrentHP(damage);
+			if(player.getCurrentHP() <= 0) {
+				JOptionPane.showConfirmDialog(null, "You have died.", "Game Over!", JOptionPane.CLOSED_OPTION);
+				window.dispose();
 			}
 			screen.revalidate();
 			screen.repaint();

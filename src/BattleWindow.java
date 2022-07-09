@@ -16,6 +16,7 @@ public class BattleWindow extends JFrame{
 		screen = new BattleScreen(this.player, this.monster);
 		options.setScreen(screen);
 		this.add(options, BorderLayout.SOUTH);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(750, 750);
 		this.add(screen);
 		this.setVisible(true);

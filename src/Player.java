@@ -42,6 +42,14 @@ public class Player {
 		this.money += random.nextInt(15) + 5;
 	}
 	
+	public void addMoney(int money) {
+		this.money += money;
+	}
+	
+	public void addEXP(int exp) {
+		this.exp += exp;
+	}
+	
 	public void damageCalculation(int incomingDamage) {
 		currentHP -= Math.round(incomingDamage - ((0.7 * strength + 0.3 * constitution) / 10));
 	}

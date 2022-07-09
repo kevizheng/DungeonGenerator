@@ -30,7 +30,6 @@ public class BattleScreen extends JPanel{
 		super();
 		this.player = player;
 		this.monster = monster;
-		
 	}
 	
 	@Override
@@ -75,18 +74,6 @@ public class BattleScreen extends JPanel{
 		}
 		revalidate();
 		repaint();
-	}
-	
-	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		Player player = new Player();
-		Goblin goblin = new Goblin();
-		BattleScreen screen = new BattleScreen(player, goblin);
-		frame.add(screen);
-		frame.setSize(500, 500);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
 

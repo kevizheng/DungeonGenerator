@@ -11,8 +11,10 @@ public class BattleWindow extends JFrame{
 	public BattleWindow(Player player, Monster monster) {
 		this.player = player;
 		this.monster = monster;
-		options = new BattleOptions(player, monster);
-		screen = new BattleScreen(player, monster);
+		options = new BattleOptions(this.player, this.monster);
+		options.setWindow(this);
+		screen = new BattleScreen(this.player, this.monster);
+		options.setScreen(screen);
 		this.add(options, BorderLayout.SOUTH);
 		this.setSize(750, 750);
 		this.add(screen);

@@ -2,14 +2,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Monster {
-	String name;
-	int maxHP = 5;
-	int currentHP = 5;
-	int moneyYield;
-	int power;
-	int defense;
-	int expYield;
-	Map<String, Integer> attacks = new HashMap<String, Integer>();
+	private String name;
+	private int maxHP = 5;
+	private int currentHP = 5;
+	private int moneyYield;
+	private int power;
+	private int defense;
+	private int expYield;
+	private Map<String, Integer> attacks = new HashMap<String, Integer>();
 	
 	
 	public Monster(String name, int maxHP, int power, int defense, int expYield, int moneyYield) {
@@ -32,6 +32,9 @@ public abstract class Monster {
 		return currentHP;
 	}
 	
+	public int getDefense() {
+		return defense;
+	}
 	public void setCurrentHP(int HP) {
 		currentHP = HP;
 	}
@@ -51,4 +54,6 @@ public abstract class Monster {
 	public int getPower() {
 		return power;
 	}
+	
+	public abstract void reset();
 }

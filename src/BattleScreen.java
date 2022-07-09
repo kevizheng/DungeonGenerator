@@ -18,13 +18,13 @@ import javax.swing.JPanel;
 
 public class BattleScreen extends JPanel{
 	
-	Player player;
-	Monster monster;
-	JLabel playerIcon = new JLabel();
-	JLabel monsterIcon = new JLabel();
-	JLabel playerHealthBar = new JLabel();
-	JLabel monsterHealthBar = new JLabel();
-	String filePath = "C:/JavaProjects/DungeonGenerator/Images/";
+	private Player player;
+	private Monster monster;
+	private JLabel playerIcon = new JLabel();
+	private JLabel monsterIcon = new JLabel();
+	private JLabel playerHealthBar = new JLabel();
+	private JLabel monsterHealthBar = new JLabel();
+	private String filePath = "C:/JavaProjects/DungeonGenerator/Images/";
 	
 	public BattleScreen(Player player, Monster monster){
 		super();

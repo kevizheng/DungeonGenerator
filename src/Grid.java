@@ -14,7 +14,9 @@ public class Grid extends JPanel implements KeyListener{
 	private static final int MAP_SIZE = Math.round((float) (ROW_SIZE * COLUMN_SIZE * 0.65));
 	private static final int MAX_TREASURE = 5;
 	private static final int MAX_MONSTERS = 5;
+	
 	private Cell[][] board = new Cell[ROW_SIZE][COLUMN_SIZE];
+	private ArrayList<Monster> potentialMonsters = new ArrayList<Monster>();
 	private ArrayList<Cell> walkwayCells = new ArrayList<Cell>();
 	private ArrayList<Cell> treasureCells = new ArrayList<Cell>();
 	private ArrayList<Cell> monsterCells = new ArrayList<Cell>();
@@ -29,6 +31,8 @@ public class Grid extends JPanel implements KeyListener{
 		super();
 		addKeyListener(this);
 		setFocusable(true);
+		potentialMonsters.add(new Goblin());
+		potentialMonsters.add(new Zombie());
 	}
 	
 	public void initialize() {
@@ -125,7 +129,7 @@ public class Grid extends JPanel implements KeyListener{
 		Random random = new Random();
 		int select = random.nextInt(101);
 		if(cell.getCellType() == CellType.WALKWAY && cell.getRow() != startRow && cell.getColumn() != startColumn) {
-			if(select % 2 == 0 && select % 3 == 0) {
+			if(select % 2 == 0 && select % 4 == 0) {
 				cell.setCellType(type);
 				if(type == CellType.TREASURE) {
 					treasureCells.add(cell);
@@ -262,7 +266,9 @@ public class Grid extends JPanel implements KeyListener{
 			if(checkLocation(monster, player)) {
 				monster.setCellType(CellType.WALKWAY);
 				monsterCells.remove(monster);
-				player.damageCalculation(3);
+				BattleWindow window = new BattleWindow(player, potentialMonsters.get(0));
+				window.setGrid(this);
+				this.setEnabled(false);
 				repaint();
 				break;
 			}

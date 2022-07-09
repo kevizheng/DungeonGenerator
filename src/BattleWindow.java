@@ -3,10 +3,12 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 public class BattleWindow extends JFrame{
-	Player player;
-	Monster monster;
-	BattleOptions options;
-	BattleScreen screen;
+	private Player player;
+	private Monster monster;
+	private BattleOptions options;
+	private BattleScreen screen;
+	private Grid grid;
+	
 	
 	public BattleWindow(Player player, Monster monster) {
 		this.player = player;
@@ -25,6 +27,11 @@ public class BattleWindow extends JFrame{
 	
 	public void setOptions(BattleOptions options) {
 		this.options = options;
+	}
+	
+	public void setGrid(Grid grid) {
+		this.grid = grid;
+		options.setGrid(grid);
 	}
 	
 	public static void main(String[] args) {

@@ -7,14 +7,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class BattleOptions extends JPanel implements ActionListener{
-	JButton attack = new JButton("Attack");
-	JButton items = new JButton("Items");
-	JButton magic = new JButton("Magic");
-	JButton run = new JButton("Run");
-	BattleWindow window;
-	BattleScreen screen;
-	Player player;
-	Monster monster;
+	private JButton attack = new JButton("Attack");
+	private JButton items = new JButton("Items");
+	private JButton magic = new JButton("Magic");
+	private JButton run = new JButton("Run");
+	private BattleWindow window;
+	private BattleScreen screen;
+	private Player player;
+	private Monster monster;
+	private Grid grid;
 	
 	public BattleOptions(Player player, Monster monster) {
 		setLayout(new GridLayout(2, 2));
@@ -33,15 +34,21 @@ public class BattleOptions extends JPanel implements ActionListener{
 	public void setScreen(BattleScreen screen) {
 		this.screen = screen;
 	}
+	
+	public void setGrid(Grid grid) {
+		this.grid = grid;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == attack) {
-			monster.setCurrentHP(monster.getCurrentHP() - (player.getStrength() + player.getConstitution()) / 2);
+			monster.setCurrentHP(monster.getCurrentHP() - (player.getStrength() + player.getConstitution() - monster.getDefense()) / 2);
 			if(monster.getCurrentHP() <= 0) {
 				JOptionPane.showConfirmDialog(null, "You won the battle! Obtained " + monster.getMoney() + " gold and " + monster.getEXP() + " EXP.", "Congratulations!", JOptionPane.CLOSED_OPTION);
 				player.addMoney(monster.getMoney());
 				player.addEXP(monster.getEXP());
 				window.dispose();
+				grid.setEnabled(true);
+				monster.reset();
 				return;
 			}
 			int damage = monster.getPower() - (player.getConstitution() + player.getStrength() / 8);

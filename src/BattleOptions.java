@@ -1,6 +1,7 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class BattleOptions extends JPanel implements ActionListener{
 		this.player = player;
 		this.monster = monster;
 		attack.addActionListener(this);
+		run.addActionListener(this);
 		add(attack);
 		add(magic);
 		add(items);
@@ -62,6 +64,30 @@ public class BattleOptions extends JPanel implements ActionListener{
 			}
 			screen.revalidate();
 			screen.repaint();
+		}
+		else if (e.getSource() == run) { 
+			Random random = new Random();
+			int nextNumber = random.nextInt(player.getMaxHP());
+			if(nextNumber <= player.getCurrentHP()) {
+				JOptionPane.showConfirmDialog(null, "You escaped the battle.", "Congratulations!", JOptionPane.CLOSED_OPTION);
+				window.dispose();
+				grid.setEnabled(true);
+				monster.reset();
+			}
+			else {
+				JOptionPane.showConfirmDialog(null, "You couldn't escape!", "Oh no!", JOptionPane.CLOSED_OPTION);
+				int damage = monster.getPower() - (player.getConstitution() + player.getStrength() / 8);
+				if(damage <= 0) {
+					damage = 1;
+				}
+				player.setCurrentHP(damage);
+				if(player.getCurrentHP() <= 0) {
+					JOptionPane.showConfirmDialog(null, "You have died.", "Game Over!", JOptionPane.CLOSED_OPTION);
+					window.dispose();
+				}
+				screen.revalidate();
+				screen.repaint();
+			}
 		}
 		
 	}

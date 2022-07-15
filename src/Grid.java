@@ -255,6 +255,12 @@ public class Grid extends JPanel implements KeyListener{
 			if(checkLocation(treasure, player)) {
 				treasure.setCellType(CellType.WALKWAY);
 				treasureCells.remove(treasure);
+				Random random = new Random();
+				int potionChance = random.nextInt(100);
+				if(potionChance % 3 == 0) {
+					JOptionPane.showConfirmDialog(null,"You found a potion!", "Item Get", JOptionPane.CLOSED_OPTION);
+					player.addItem(new Potion());
+				}
 				player.addTreasureMoney();
 				repaint();
 				break;

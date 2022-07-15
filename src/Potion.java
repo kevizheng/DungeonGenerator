@@ -2,7 +2,7 @@
 public class Potion extends Item {
 
 	public Potion() {
-		super(10, ItemEffect.HEAL);
+		super("Potion", 10, ItemEffect.HEAL);
 	}
 
 	

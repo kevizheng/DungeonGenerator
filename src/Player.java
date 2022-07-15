@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -9,6 +11,8 @@ public class Player {
 	private int strength, dexterity, constitution, currentHP, row, column, exp, maxHP;
 	private int level = 1;
 	private int money = 0;
+	private ArrayList<Item> inventory = new ArrayList<Item>();
+	private Map<Item, Integer> itemCount;
 	
 	public Player() {
 		Random random = new Random();
@@ -17,6 +21,7 @@ public class Player {
 		constitution = random.nextInt(16) + STAT_SHIFT;
 		maxHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
 		currentHP = maxHP;
+		itemCount = new HashMap<Item, Integer>();
 	}
 
 	public void movePlayer(Direction direction) {
@@ -51,6 +56,16 @@ public class Player {
 		this.exp += exp;
 	}
 	
+	public void addItem(Item item) {
+		if(inventory.contains(item)) {
+			itemCount.put(item, itemCount.get(item) + 1);
+		}
+		else {
+			inventory.add(item);
+			itemCount.put(item, 1);
+		}
+	}
+
 	public void damageCalculation(int incomingDamage) {
 		currentHP -= Math.round(incomingDamage - ((0.7 * strength + 0.3 * constitution) / 10));
 	}
@@ -73,7 +88,19 @@ public class Player {
 	
 	public void setCurrentHP(int damage) {
 		currentHP -= damage;
+		if(currentHP > maxHP) {
+			currentHP = maxHP;
+		}
 	}
+	
+	public ArrayList<Item> getInventory(){
+		return inventory;
+	}
+	
+	public Map<Item, Integer> getItemCount(){
+		return itemCount;
+	}
+	
 	public int getRow() {
 		return row;
 	}

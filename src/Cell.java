@@ -33,6 +33,7 @@ public class Cell {
 		return column;
 	}
 	
+	// Color the cell based on what type of cell it is
 	public void draw(int cellWidth, int cellHeight, int xOffset, int yOffset, Graphics g) {
 		switch(cellType) {
 		case UNUSED:

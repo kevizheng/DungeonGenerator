@@ -3,6 +3,7 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+// Class that displays all of the player's information
 public class InfoPanel extends JPanel{
 	private Grid grid;
 	private Player player;

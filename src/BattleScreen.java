@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
+// The graphic that will display the player, monster, and both of their HP
 public class BattleScreen extends JPanel{
 	
 	private Player player;
@@ -35,11 +37,13 @@ public class BattleScreen extends JPanel{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		// Get the background image and have it dynamically size itself with the window
 		ImageIcon background = new ImageIcon(filePath + "background.png");
 		Image backgroundImage = background.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
 		background = new ImageIcon(backgroundImage, background.getDescription());
 		g.drawImage(background.getImage(), 0, 0, null);
 		this.setLayout(new GridLayout(2,2));
+		// Get the player image and monster image and add them to the JPanel and add their health bars
 		try {
 			
 			playerIcon.setSize(new Dimension(getWidth()/2, getHeight()/2));

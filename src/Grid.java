@@ -35,6 +35,7 @@ public class Grid extends JPanel implements KeyListener{
 		potentialMonsters.add(new Zombie());
 	}
 	
+	// Creates all of the cells in the board and random generates the map via createMap()
 	public void initialize() {
 		for(int i = 0; i < ROW_SIZE; i++) {
 			for(int j = 0; j < COLUMN_SIZE; j++) {
@@ -45,6 +46,11 @@ public class Grid extends JPanel implements KeyListener{
 		createMap();
 	}
 	
+	// Randomly selects 2 numbers based on the row and column size and makes that cell a walkway. Then begins randomly generating the map
+	// based on a random number from 0-3. 0 makes the cell above the current one a walkway, 1 makes the cell to the right
+	// a walkway, 2 makes the cell below the current cell a walkway, and 3 makes the cell to the left a walkway.
+	// The current cell is then changed to the cell that was just made a walkway, and if that cell is already a walkway,
+	// it continue with the process without incrementing the current size of the map.
 	private void createMap() {
 		Random random = new Random();
 		int rowNumber = random.nextInt(ROW_SIZE);
@@ -96,14 +102,18 @@ public class Grid extends JPanel implements KeyListener{
 				break;
 			}
 		}
+		
+		// Selects a random walkway cell and then randomly decides if it is a treasure cell
 		for(int i = 0; i < MAX_TREASURE; i++) {
 			Cell potentialTreasure = walkwayCells.get(random.nextInt(walkwayCells.size()));
 			selectSpecialCell(potentialTreasure, CellType.TREASURE);
 		}
+		// Selects a random walkway cell and then randomly decides if it is a monster cell
 		for(int i = 0; i < MAX_MONSTERS; i++) {
 			Cell potentialMonster = walkwayCells.get(random.nextInt(walkwayCells.size()));
 			selectSpecialCell(potentialMonster, CellType.MONSTER);
 		}
+		// Continuously selects walkway cells until a normal walkway cell is found and made the exit cell
 		while(true) {
 			int selectCell = random.nextInt(walkwayCells.size());
 			Cell potentialExit = walkwayCells.get(selectCell);
@@ -117,6 +127,7 @@ public class Grid extends JPanel implements KeyListener{
 		}
 	}
 	private void setWalkway(int rowNumber, int columnNumber) {
+		// If the given cell is already a walkway, then do nothing. Otherwise, make it a walkway cell and increase the current map size
 		if(board[rowNumber][columnNumber].getCellType() == CellType.WALKWAY) {
 			return;
 		}
@@ -126,6 +137,7 @@ public class Grid extends JPanel implements KeyListener{
 	}
 	
 	private void selectSpecialCell(Cell cell, CellType type) {
+		// Randomly determine if the given cell should be a treasure or monster cell
 		Random random = new Random();
 		int select = random.nextInt(101);
 		if(cell.getCellType() == CellType.WALKWAY && cell.getRow() != startRow && cell.getColumn() != startColumn) {
@@ -161,6 +173,7 @@ public class Grid extends JPanel implements KeyListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		// Create the grid graphic and draw the player
 		int cellWidth = this.getWidth() / COLUMN_SIZE;
 		int cellHeight = this.getHeight() / ROW_SIZE;
 		for(int i = 0; i < ROW_SIZE; i++) {
@@ -186,6 +199,8 @@ public class Grid extends JPanel implements KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// Based on user input, move the player. Uses regular WASD controls
+		// and checks the current cell for any special effects like treasure or monster fights
 		switch(e.getKeyChar()) {
 		case 'w':
 			if(checkBounds(Direction.UP)) {
@@ -219,6 +234,7 @@ public class Grid extends JPanel implements KeyListener{
 	}
 	
 	private boolean checkBounds(Direction direction) {
+		// Checks where the player wants to move so that they don't move off the walkway cells
 		int newColumn = 0;
 		int newRow = 0;
 		switch(direction) {
@@ -251,6 +267,8 @@ public class Grid extends JPanel implements KeyListener{
 		}
 	}
 	private void treasureCheck() {
+		// For all treasure cells, if the user is on one, give them gold and potentially a potion
+		// then convert the cell into a walkway cell
 		for(Cell treasure : treasureCells) {
 			if(checkLocation(treasure, player)) {
 				treasure.setCellType(CellType.WALKWAY);
@@ -268,6 +286,8 @@ public class Grid extends JPanel implements KeyListener{
 		}
 	}
 	private void monsterCheck() {
+		// For all monster cells, if the user is on a monster cell, initiate combat and do not allow the player to move
+		// until the battle is complete
 		for(Cell monster : monsterCells) {
 			if(checkLocation(monster, player)) {
 				monster.setCellType(CellType.WALKWAY);
@@ -285,6 +305,8 @@ public class Grid extends JPanel implements KeyListener{
 	}
 	
 	private void exitCheck() {
+		// If the player is on the exit, open a choice box that asks them if they want to proceed
+		// If yes, clear everything an build another map
 		revalidate();
 		repaint();
 		if(checkLocation(exitCell, player)) {

@@ -2,8 +2,10 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+// Class that initializes the game
 public class StartGame extends JFrame{
 
+	// Add the grid and player information to a JFrame and display it to the player
 	public StartGame() {
 		Grid game = Grid.getGame();
 		InfoPanel info = new InfoPanel();

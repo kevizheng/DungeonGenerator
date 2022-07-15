@@ -9,7 +9,7 @@ public class BattleWindow extends JFrame{
 	private BattleScreen screen;
 	private Grid grid;
 	
-	
+	// Constructs the window that will display the battle between the player and a given monster
 	public BattleWindow(Player player, Monster monster) {
 		this.player = player;
 		this.monster = monster;
@@ -32,12 +32,6 @@ public class BattleWindow extends JFrame{
 	public void setGrid(Grid grid) {
 		this.grid = grid;
 		options.setGrid(grid);
-	}
-	
-	public static void main(String[] args) {
-		Player player = new Player();
-		Monster monster = new Goblin();
-		BattleWindow window = new BattleWindow(player, monster);
 	}
 }
 

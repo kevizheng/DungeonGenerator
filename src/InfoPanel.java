@@ -14,6 +14,7 @@ public class InfoPanel extends JPanel{
 	private JLabel dexterity;
 	private JLabel constitution;
 	private JLabel level;
+	private JLabel mp;
 	
 	public InfoPanel() {
 	}
@@ -22,6 +23,7 @@ public class InfoPanel extends JPanel{
 		this.removeAll();
 		this.setLayout(new GridLayout(3, 3));
 		hp = new JLabel("HP: " + player.getCurrentHP() + "/" + player.getMaxHP());
+		mp = new JLabel("MP: " + player.getCurrentMP() + "/" + player.getMaxMP());
 		money = new JLabel("Money: " + player.getMoney());
 		exp = new JLabel("EXP: " + player.getEXP());
 		strength = new JLabel("Strength: " + player.getStrength());
@@ -30,6 +32,7 @@ public class InfoPanel extends JPanel{
 		level = new JLabel("Level: " + player.getLevel());
 		add(level);
 		add(hp);
+		add(mp);
 		add(exp);
 		add(money);
 		add(strength);

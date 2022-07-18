@@ -2,9 +2,9 @@
 public abstract class Item {
 	private String name;
 	private int intensity;
-	private ItemEffect effect;
+	private Effect effect;
 	
-	public Item(String name, int intensity, ItemEffect effect) {
+	public Item(String name, int intensity, Effect effect) {
 		this.name = name;
 		this.intensity = intensity;
 		this.effect = effect;
@@ -18,7 +18,7 @@ public abstract class Item {
 		return name;
 	}
 	
-	public ItemEffect getEffect() {
+	public Effect getEffect() {
 		return effect;
 	}
 }

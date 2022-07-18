@@ -7,20 +7,22 @@ import java.util.Random;
 
 public class Player {
 	private static final int HP_SHIFT = 5;
-	private static final int STAT_SHIFT = 5;
+	private static final int STAT_SHIFT = 1;
 	private int strength, dexterity, constitution, currentHP, row, column, exp, maxHP;
 	private int level = 1;
 	private int money = 0;
 	private ArrayList<Item> inventory = new ArrayList<Item>();
 	private Map<Item, Integer> itemCount;
+	private int nextLevelEXP;
 	
 	public Player() {
 		Random random = new Random();
-		strength = random.nextInt(16) + STAT_SHIFT;
-		dexterity = random.nextInt(16) + STAT_SHIFT;
-		constitution = random.nextInt(16) + STAT_SHIFT;
-		maxHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
+		strength = random.nextInt(5) + STAT_SHIFT;
+		dexterity = random.nextInt(5) + STAT_SHIFT;
+		constitution = random.nextInt(5) + STAT_SHIFT;
+		calculateHP();
 		currentHP = maxHP;
+		nextLevelEXP = 4 * level / 5;
 		itemCount = new HashMap<Item, Integer>();
 	}
 
@@ -52,8 +54,20 @@ public class Player {
 		this.money += money;
 	}
 	
-	public void addEXP(int exp) {
+	public boolean addEXP(int exp) {
 		this.exp += exp;
+		boolean levelUp = false;
+		while(this.exp > nextLevelEXP) {
+			level++;
+			levelUp = true;
+			Random random = new Random();
+			strength += random.nextInt(3);
+			constitution += random.nextInt(3);
+			dexterity += random.nextInt(3);
+			calculateHP();
+			nextLevelEXP = Math.round((float) (4 * Math.pow(level, 3) / 5));
+		}
+		return levelUp;
 	}
 	
 	public void addItem(Item item) {
@@ -91,6 +105,11 @@ public class Player {
 		if(currentHP > maxHP) {
 			currentHP = maxHP;
 		}
+	}
+	
+	private void calculateHP() {
+		maxHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
+		currentHP = Math.round((2 * constitution + HP_SHIFT) * level / 100 + level + 10);
 	}
 	
 	public ArrayList<Item> getInventory(){

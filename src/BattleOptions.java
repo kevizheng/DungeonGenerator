@@ -62,7 +62,9 @@ public class BattleOptions extends JPanel implements ActionListener{
 			if(monster.getCurrentHP() <= 0) {
 				JOptionPane.showConfirmDialog(null, "You won the battle! Obtained " + monster.getMoney() + " gold and " + monster.getEXP() + " EXP.", "Congratulations!", JOptionPane.CLOSED_OPTION);
 				player.addMoney(monster.getMoney());
-				player.addEXP(monster.getEXP());
+				if(player.addEXP(monster.getEXP())) {
+					JOptionPane.showConfirmDialog(null, "You have leveled up! You are now Level " + player.getLevel() + ".", "Level Up!", JOptionPane.CLOSED_OPTION);
+				}
 				window.dispose();
 				grid.setEnabled(true);
 				monster.reset();

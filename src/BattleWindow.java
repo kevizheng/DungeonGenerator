@@ -19,7 +19,7 @@ public class BattleWindow extends JFrame{
 		options.setScreen(screen);
 		this.add(options, BorderLayout.SOUTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(750, 750);
+		this.setSize(650, 650);
 		this.add(screen);
 		this.setVisible(true);
 	}

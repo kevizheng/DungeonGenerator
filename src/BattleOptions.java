@@ -209,7 +209,9 @@ public class BattleOptions extends JPanel implements ActionListener{
 								break;
 							case DAMAGE:
 								monster.setCurrentHP(monster.getCurrentHP() - selectedSpell.getIntensity());
-								checkMonsterDeath();
+								if(checkMonsterDeath()) {
+									break;
+								};
 								attackPlayer();
 								break;
 							// To be implemented
